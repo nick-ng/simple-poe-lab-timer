@@ -2,14 +2,25 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Lab Timer</title>
+    <style type="text/css">
+      body {
+        font-family: sans-serif;
+      }
+      .current_phase {
+        font-size: 24px;
+        margin: 5px 0;
+        font-weight: bold;
+      }
+    </style>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+    <div>Current:</div>
+    <div id="current-phase" class="current_phase">None</div>
+    <div>
+      I am counting <span id="counter">0</span>
+    </div>
+    <div id="fullLog">a</div>
   </body>
 
   <script>
