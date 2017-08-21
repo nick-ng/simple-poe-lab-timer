@@ -4,20 +4,19 @@
 
 const {
   promiseTimeout,
-  shapeLog,
 } = require('./utils');
-const {readPromise } = require('./utils/fs');
-const { uninterestingText } = require('./resources');
+const { getLog } = require('./utils/fs');
 
 // const poeLogPath = '../../Games/PathOfExile/logs/Client.txt';
 const poeLogPath = './example_lab_run.txt';
 
+let latestRun = []; // Can't think of a functional way to store the run state right now.
+
 const updatePoeLog = async () => {
-  const poeLogRaw = await readPromise(poeLogPath);
-  const poeLog = shapeLog(poeLogRaw);
+  const poeLog = await getLog(poeLogPath);
   poeLog.forEach(entry => {
     const logEntry = document.createElement('div');
-    logEntry.textContent = entry;
+    logEntry.textContent = entry.timestamp;
     document.getElementById('fullLog')
       .appendChild(logEntry);
   })
@@ -25,11 +24,11 @@ const updatePoeLog = async () => {
 
 updatePoeLog();
 
-const a = async () => {
+const mainLoop = async () => {
   for (let i = 0; i < 100; i++) {
     const counterField = document.getElementById('counter').textContent = i;
     await promiseTimeout(1000);
   }
 };
 
-a();
+mainLoop();
