@@ -2,7 +2,7 @@ const uuid = require('uuid/v4');
 
 class LabyrinthRun {
   constructor() {
-    this.listners = [];
+    this.triggers = [];
     this.directions = [];
   }
 
@@ -18,7 +18,7 @@ class LabyrinthRun {
 
   on(eventName, callback) {
     const id = uuid();
-    this.listners.push({
+    this.triggers.push({
       id,
       eventName,
       callback,
@@ -27,11 +27,11 @@ class LabyrinthRun {
   }
 
   off(eventId) {
-    this.listners = this.listners.filter(listner => listner.id !== eventId);
+    this.triggers = this.triggers.filter(trigger => trigger.id !== eventId);
   }
 
-  _listnerCaller(eventName, value) {
-    this.listners.filter(listner => listner.eventName === eventName)
-      .forEach(listner => listner.callback(value));
+  _triggerCaller(eventName, value) {
+    this.triggers.filter(trigger => trigger.eventName === eventName)
+      .forEach(trigger => trigger.callback(value));
   }
 }
