@@ -2,13 +2,17 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
+const Tail = require('always-tail');
+
 const {
   promiseTimeout,
+  shapeLog,
 } = require('./utils');
 const { getLog } = require('./utils/fs');
+const { roomIdentifier } = require('./utils/labyrinth');
 
-// const poeLogPath = '../../Games/PathOfExile/logs/Client.txt';
-const poeLogPath = './example_lab_run.txt';
+const poeLogPath = '../../Games/PathOfExile/logs/Client.txt';
+// const poeLogPath = './example_lab_run.txt';
 
 let latestRun = []; // Can't think of a functional way to store the run state right now.
 
@@ -22,13 +26,21 @@ const updatePoeLog = async () => {
   })
 }
 
-updatePoeLog();
-
-const mainLoop = async () => {
-  for (let i = 0; i < 100; i++) {
-    const counterField = document.getElementById('counter').textContent = i;
-    await promiseTimeout(1000);
+const tailHandler = (line) => {
+  const logEntries = shapeLog(line);
+  if (logEntries.length > 0) {
+    logEntries.forEach(logEntry => {
+      const room = roomIdentifier(logEntry);
+      if (room) {
+        const previousDiv = document.getElementById('previous');
+        const a = document.createElement('div');
+        a.textContent = room;
+        previousDiv.appendChild(a);
+      }
+    });
   }
-};
+}
 
-mainLoop();
+const poeTail = new Tail(poeLogPath);
+
+poeTail.on('line', tailHandler);
