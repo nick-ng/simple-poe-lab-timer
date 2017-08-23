@@ -10,37 +10,49 @@ const {
 } = require('./utils');
 const { getLog } = require('./utils/fs');
 const { roomIdentifier } = require('./utils/labyrinth');
+const LabyrinthRun = require('./classes/labyrinth-run');
 
 const poeLogPath = '../../Games/PathOfExile/logs/Client.txt';
 // const poeLogPath = './example_lab_run.txt';
 
-let latestRun = []; // Can't think of a functional way to store the run state right now.
+const labRun = new LabyrinthRun();
 
-const updatePoeLog = async () => {
-  const poeLog = await getLog(poeLogPath);
-  poeLog.forEach(entry => {
-    const logEntry = document.createElement('div');
-    logEntry.textContent = entry.timestamp;
-    document.getElementById('fullLog')
-      .appendChild(logEntry);
-  })
-}
+labRun.on('directions-loaded', (a) => {
+  console.log('labRun.directions', labRun.directions);
+  console.log('a', a);
+  document.getElementById('previous').textContent = JSON.stringify(labRun.directions);
+});
 
-const tailHandler = (line) => {
-  const logEntries = shapeLog(line);
-  if (logEntries.length > 0) {
-    logEntries.forEach(logEntry => {
-      const room = roomIdentifier(logEntry);
-      if (room) {
-        const previousDiv = document.getElementById('previous');
-        const a = document.createElement('div');
-        a.textContent = room;
-        previousDiv.appendChild(a);
-      }
-    });
-  }
-}
+labRun.on('current-direction-changed', () => {
+  document.getElementById('current-room').textContent = labRun.currentDirection;
+  document.getElementById('next-room').textContent = labRun.nextDirection;
+})
 
-const poeTail = new Tail(poeLogPath);
+// const updatePoeLog = async () => {
+//   const poeLog = await getLog(poeLogPath);
+//   poeLog.forEach(entry => {
+//     const logEntry = document.createElement('div');
+//     logEntry.textContent = entry.timestamp;
+//     document.getElementById('fullLog')
+//       .appendChild(logEntry);
+//   })
+// }
 
-poeTail.on('line', tailHandler);
+// const tailHandler = (line) => {
+//   const logEntries = shapeLog(line);
+//   if (logEntries.length > 0) {
+//     logEntries.forEach(logEntry => {
+//       const room = roomIdentifier(logEntry);
+//       if (room) {
+//         const previousDiv = document.getElementById('previous');
+//         const a = document.createElement('div');
+//         a.textContent = room;
+//         previousDiv.appendChild(a);
+//       }
+//     });
+//   }
+// }
+
+// const poeTail = new Tail(poeLogPath);
+
+// poeTail.on('line', tailHandler);
