@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start",
+  "name": "poe-lab-timer",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "An automatic labyrinth timer for Path of Exile",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
@@ -16,5 +16,9 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "~1.6.2"
+  },
+  "dependencies": {
+    "always-tail": "^0.2.0",
+    "uuid": "^3.1.0"
   }
 }

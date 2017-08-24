@@ -7,20 +7,41 @@
       body {
         font-family: sans-serif;
       }
-      .current_phase {
+      .important_events {
+        display: flex;
+        flex-direction: row;
+      }
+      .important_event {
+        flex: 1 1 50%;
+      }
+      .small_title {
+        font-size: 10px;
+      }
+      .room_instruction {
         font-size: 24px;
         margin: 5px 0;
         font-weight: bold;
       }
+      .previous {
+        display: flex;
+        flex-direction: column-reverse;
+      }
     </style>
   </head>
   <body>
-    <div>Current:</div>
-    <div id="current-phase" class="current_phase">None</div>
-    <div>
-      I am counting <span id="counter">0</span>
+    <div class="important_events">
+      <div class="important_event">
+        <div class="small_title">Current</div>
+        <div id="current-room" class="room_instruction">None</div>
+      </div>
+      <div class="important_event">
+        <div class="small_title">Next</div>
+        <div id="next-room" class="room_instruction">None</div>
+      </div>
     </div>
-    <div id="fullLog">a</div>
+    <hr />
+    <div class="small_title">Previous</div>
+    <div id="previous" class="previous"></div>
   </body>
 
   <script>

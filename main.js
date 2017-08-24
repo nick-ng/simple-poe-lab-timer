@@ -16,7 +16,10 @@ const nick = {
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 300, height: 200})
+  mainWindow = new BrowserWindow({
+    width: 300,
+    height: 200,
+  })
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -24,6 +27,9 @@ function createWindow () {
     protocol: 'file:',
     slashes: true
   }))
+
+  // make sure the windows is always on top
+  mainWindow.setAlwaysOnTop(true);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
