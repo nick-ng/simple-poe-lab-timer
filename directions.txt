@@ -2,6 +2,6 @@
 Izaro 1
 79
 Izaro 2
-97
-97
+79
+879
 Izaro 3

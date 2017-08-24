@@ -2,11 +2,20 @@ const START_STRING = '] : You have entered Aspirants\' Plaza.';
 const ENTERING_AREA = '] : You have entered ';
 const IZARO_DIALOGUE = '] Izaro: ';
 const izaroFinalDialogue = [
-  '] Izaro: Triumphant at last!',
+  'Triumphant at last!',
+  'I die for the Empire!',
 ]
 const leavingLabyrinth = [
   '] : You have entered Highgate.',
+  '] : You have entered The Forest Encampment.',
+  '] : You have entered The Sarn Encampment.',
+  '] : You have entered Highgate.',
+  '] : You have entered Highgate.',
 ]
+
+const plazaIdentifier = (logEntry) => {
+  return logEntry.entry.includes(START_STRING);
+}
 
 const roomIdentifier = (logEntry) => {
   if (logEntry.entry.includes(ENTERING_AREA)) {
@@ -22,7 +31,14 @@ const izaroQuote = (logEntry) => {
   return false;
 };
 
+const leftLabyrinth = (logEntry) => {
+  return leavingLabyrinth.some(town => logEntry.entry.includes(town));
+}
+
 module.exports = {
+  plazaIdentifier,
   roomIdentifier,
   izaroQuote,
+  izaroFinalDialogue,
+  leftLabyrinth,
 }

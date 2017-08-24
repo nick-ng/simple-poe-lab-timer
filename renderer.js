@@ -17,9 +17,7 @@ const poeLogPath = '../../Games/PathOfExile/logs/Client.txt';
 
 const labRun = new LabyrinthRun();
 
-labRun.on('directions-loaded', (a) => {
-  console.log('labRun.directions', labRun.directions);
-  console.log('a', a);
+labRun.on('directions-loaded', () => {
   document.getElementById('previous').textContent = JSON.stringify(labRun.directions);
 });
 
