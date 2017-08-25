@@ -1,2 +1,1 @@
-start npm start
-pause
+npm start
