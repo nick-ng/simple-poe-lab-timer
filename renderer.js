@@ -18,10 +18,6 @@ const poeLogPath = '../../Games/PathOfExile/logs/Client.txt';
 
 const labRun = new LabyrinthRun();
 
-labRun.on('directions-loaded', () => {
-  document.getElementById('notes').textContent = JSON.stringify(labRun.directions);
-});
-
 labRun.on('current-direction-changed', () => {
   emptyElement(document.getElementById('current-room'));
   document.getElementById('current-room')
