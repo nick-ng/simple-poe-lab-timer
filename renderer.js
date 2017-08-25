@@ -10,6 +10,7 @@ const {
 } = require('./utils');
 const { getLog } = require('./utils/fs');
 const { roomIdentifier } = require('./utils/labyrinth');
+const { makeDirections, emptyElement } = require('./utils/dom');
 const LabyrinthRun = require('./classes/labyrinth-run');
 
 const poeLogPath = '../../Games/PathOfExile/logs/Client.txt';
@@ -17,40 +18,11 @@ const poeLogPath = '../../Games/PathOfExile/logs/Client.txt';
 
 const labRun = new LabyrinthRun();
 
-labRun.on('directions-loaded', () => {
-  document.getElementById('previous').textContent = JSON.stringify(labRun.directions);
-});
-
 labRun.on('current-direction-changed', () => {
-  document.getElementById('current-room').textContent = labRun.currentDirection;
-  document.getElementById('next-room').textContent = labRun.nextDirection;
+  emptyElement(document.getElementById('current-room'));
+  document.getElementById('current-room')
+    .appendChild(makeDirections(labRun.currentDirection));
+  emptyElement(document.getElementById('next-room'));
+  document.getElementById('next-room')
+    .appendChild(makeDirections(labRun.nextDirection));
 })
-
-// const updatePoeLog = async () => {
-//   const poeLog = await getLog(poeLogPath);
-//   poeLog.forEach(entry => {
-//     const logEntry = document.createElement('div');
-//     logEntry.textContent = entry.timestamp;
-//     document.getElementById('fullLog')
-//       .appendChild(logEntry);
-//   })
-// }
-
-// const tailHandler = (line) => {
-//   const logEntries = shapeLog(line);
-//   if (logEntries.length > 0) {
-//     logEntries.forEach(logEntry => {
-//       const room = roomIdentifier(logEntry);
-//       if (room) {
-//         const previousDiv = document.getElementById('previous');
-//         const a = document.createElement('div');
-//         a.textContent = room;
-//         previousDiv.appendChild(a);
-//       }
-//     });
-//   }
-// }
-
-// const poeTail = new Tail(poeLogPath);
-
-// poeTail.on('line', tailHandler);

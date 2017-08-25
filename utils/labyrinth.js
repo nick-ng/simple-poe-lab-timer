@@ -4,6 +4,7 @@ const IZARO_DIALOGUE = '] Izaro: ';
 const izaroFinalDialogue = [
   'Triumphant at last!',
   'I die for the Empire!',
+  'The trap of tyranny is inescapable.'
 ]
 const leavingLabyrinth = [
   '] : You have entered Highgate.',
