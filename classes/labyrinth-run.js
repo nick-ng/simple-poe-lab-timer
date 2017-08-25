@@ -12,6 +12,8 @@ class LabyrinthRun {
     this.tail = null;
     this.runProgress = 0;
     this.lastIzaroQuote = '';
+    this.intervalId = null;
+    this.startTime = new Date();
 
     this.getRunPhase = this.getRunPhase.bind(this);
     this._advancePhase = this._advancePhase.bind(this);
@@ -20,6 +22,7 @@ class LabyrinthRun {
     this._startTailing = this._startTailing.bind(this);
     this._triggerCaller = this._triggerCaller.bind(this);
     this._tailHandler = this._tailHandler.bind(this);
+    this._updateTime = this._updateTime.bind(this);
 
     readPromise('./directions.txt')
     .then(data => {
@@ -99,15 +102,24 @@ class LabyrinthRun {
           case 'Finish!':
             if (izaro && izaroFinalDialogue.includes(izaro)) {
               this._advancePhase();
+              clearInterval(this.intervalId);
+              this.intervalId = null;
+              this._updateTime(logEntry.timestamp);
             }
           case 'room':
           default:
             if (room) {
+              if (this.getRunPhase(0) === 'ready') {
+                this.startTime = logEntry.timestamp;
+                this.intervalId = setInterval(this._updateTime, 340);
+              }
               this._advancePhase();
             }
         }
         if (leftLabyrinth(logEntry)) {
           this._advancePhase(true);
+          clearInterval(this.intervalId);
+          this.intervalId = null;
         }
       });
     }
@@ -119,6 +131,17 @@ class LabyrinthRun {
     }
     this.tail = new Tail(logPath, separator, 340);
     this.tail.on('line', this._tailHandler);
+  }
+
+  _updateTime(manualTime = false) {
+    const now = manualTime || new Date();
+    const seconds = Math.round((now - this.startTime) / 1000);
+    const m = Math.floor(seconds / 60);
+    let s = `${seconds - (m * 60)}`;
+    if (s.length === 1) {
+      s = `0${s}`;
+    }
+    document.getElementById('timer').textContent = `${m}:${s}`
   }
 
   on(eventName, callback) {

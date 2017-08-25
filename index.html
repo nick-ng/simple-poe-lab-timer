@@ -7,41 +7,100 @@
       body {
         font-family: sans-serif;
       }
+      .timer {
+      }
       .important_events {
         display: flex;
         flex-direction: row;
       }
       .important_event {
         flex: 1 1 50%;
+        height: 65px;
+        display: flex;
+        flex-direction: column;
       }
-      .small_title {
+      .small_heading {
         font-size: 10px;
       }
       .room_instruction {
         font-size: 24px;
-        margin: 5px 0;
         font-weight: bold;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex: 1 1;
       }
-      .previous {
+      .notes {
         display: flex;
         flex-direction: column-reverse;
+      }
+
+      .direction_indicator {
+        position: relative;
+        margin: 5px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: solid 1px black;
+        background-color: grey;
+      }
+
+      .small_direction {
+        position: absolute;
+        top: 0px; left: 0px; right: 0px; bottom: 0px;
+        margin: auto;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        border: solid 1px black;
+        background-color: skyblue;
+      }
+
+      .correct {
+          background-color: yellow;
+      }
+
+      .direction1 {
+        transform: rotate(135deg) translate(15px, 0px);
+      }
+      .direction2 {
+        transform: rotate(90deg) translate(15px, 0px);
+      }
+      .direction3 {
+        transform: rotate(45deg) translate(15px, 0px);
+      }
+      .direction4 {
+        transform: rotate(180deg) translate(15px, 0px);
+      }
+      .direction6 {
+        transform: rotate(0deg) translate(15px, 0px);
+      }
+      .direction7 {
+        transform: rotate(225deg) translate(15px, 0px);
+      }
+      .direction8 {
+        transform: rotate(270deg) translate(15px, 0px);
+      }
+      .direction9 {
+        transform: rotate(315deg) translate(15px, 0px);
       }
     </style>
   </head>
   <body>
     <div class="important_events">
       <div class="important_event">
-        <div class="small_title">Current</div>
+        <div class="small_heading">Current</div>
         <div id="current-room" class="room_instruction">None</div>
       </div>
       <div class="important_event">
-        <div class="small_title">Next</div>
+        <div class="small_heading">Next</div>
         <div id="next-room" class="room_instruction">None</div>
       </div>
     </div>
+    <div id="timer" class="timer">0:00</div>
     <hr />
-    <div class="small_title">Previous</div>
-    <div id="previous" class="previous"></div>
+    <div class="small_heading">Notes</div>
+    <div id="notes" class="notes"></div>
   </body>
 
   <script>
