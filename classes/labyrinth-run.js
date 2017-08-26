@@ -1,5 +1,6 @@
 const uuid = require('uuid/v4');
 const Tail = require('always-tail');
+const fs = require('fs');
 const { splitLines, shapeLog } = require('../utils');
 const { readPromise } = require('../utils/fs');
 const { plazaIdentifier, roomIdentifier, izaroQuote, izaroFinalDialogue, leftLabyrinth } = require('../utils/labyrinth');
@@ -11,7 +12,7 @@ class LabyrinthRun {
     this.logPath = logPath;
     this.tail = null;
     this.runProgress = 0;
-    this.lastIzaroQuote = '';
+    this.lastIzaroQuoteEntry = null;
     this.intervalId = null;
     this.startTime = new Date();
 
@@ -95,7 +96,7 @@ class LabyrinthRun {
             break;
           case 'izaro':
             if (izaro) {
-              this.lastIzaroQuote = izaro;
+              this.lastIzaroQuoteEntry = logEntry;
               this._advancePhase();
             }
             break;
@@ -120,6 +121,12 @@ class LabyrinthRun {
           this._advancePhase(true);
           clearInterval(this.intervalId);
           this.intervalId = null;
+          const { lastIzaroQuoteEntry } = this;
+          if (lastIzaroQuoteEntry) {
+            this._updateTime(lastIzaroQuoteEntry.timestamp);
+            fs.appendFile('final-izaro-quotes.txt', izaroQuote(logEntry));
+          }
+          this.lastIzaroQuoteEntry = null;
         }
       });
     }
