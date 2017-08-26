@@ -18,7 +18,7 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 300,
-    height: 200,
+    height: 150,
     frame: false,
   })
 
@@ -30,7 +30,7 @@ function createWindow () {
   }))
 
   // make sure the windows is always on top
-  mainWindow.setAlwaysOnTop(true);
+  setInterval(() => mainWindow.setAlwaysOnTop(true), 1000);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

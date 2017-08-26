@@ -8,21 +8,24 @@ const {
   promiseTimeout,
   shapeLog,
 } = require('./utils');
-const { getLog } = require('./utils/fs');
+const { readPromise, getLog } = require('./utils/fs');
 const { roomIdentifier } = require('./utils/labyrinth');
 const { makeDirections, emptyElement } = require('./utils/dom');
 const LabyrinthRun = require('./classes/labyrinth-run');
 
-const poeLogPath = '../../Games/PathOfExile/logs/Client.txt';
+const poeLogPath = '../../Games/Path Of Exile/logs/Client.txt';
 // const poeLogPath = './example_lab_run.txt';
 
-const labRun = new LabyrinthRun();
-
-labRun.on('current-direction-changed', () => {
-  emptyElement(document.getElementById('current-room'));
-  document.getElementById('current-room')
-    .appendChild(makeDirections(labRun.currentDirection));
-  emptyElement(document.getElementById('next-room'));
-  document.getElementById('next-room')
-    .appendChild(makeDirections(labRun.nextDirection));
-})
+readPromise('./config.json').then(a => {
+  const config = JSON.parse(a);
+  const labRun = new LabyrinthRun(config.logPath || poeLogPath);
+  
+  labRun.on('current-direction-changed', () => {
+    emptyElement(document.getElementById('current-room'));
+    document.getElementById('current-room')
+      .appendChild(makeDirections(labRun.currentDirection));
+    emptyElement(document.getElementById('next-room'));
+    document.getElementById('next-room')
+      .appendChild(makeDirections(labRun.nextDirection));
+  });
+});
