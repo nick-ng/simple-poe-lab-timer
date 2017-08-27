@@ -88,6 +88,9 @@ class LabyrinthRun {
       logEntries.forEach(logEntry => {
         const room = roomIdentifier(logEntry);
         const izaro = izaroQuote(logEntry);
+        if (izaro) {
+          this.lastIzaroQuoteEntry = logEntry;
+        }
         switch (this.getRunPhase(1)) { // Check next phase
           case 'ready':
             if (plazaIdentifier(logEntry)) {
@@ -96,7 +99,6 @@ class LabyrinthRun {
             break;
           case 'izaro':
             if (izaro) {
-              this.lastIzaroQuoteEntry = logEntry;
               this._advancePhase();
             }
             break;
@@ -125,7 +127,7 @@ class LabyrinthRun {
           if (lastIzaroQuoteEntry) {
             this._updateTime(lastIzaroQuoteEntry.timestamp);
             fs.appendFile('final-izaro-quotes.txt', `${izaroQuote(lastIzaroQuoteEntry)}
-            `);
+`);
           }
           this.lastIzaroQuoteEntry = null;
         }
