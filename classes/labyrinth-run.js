@@ -124,7 +124,8 @@ class LabyrinthRun {
           const { lastIzaroQuoteEntry } = this;
           if (lastIzaroQuoteEntry) {
             this._updateTime(lastIzaroQuoteEntry.timestamp);
-            fs.appendFile('final-izaro-quotes.txt', izaroQuote(lastIzaroQuoteEntry));
+            fs.appendFile('final-izaro-quotes.txt', `${izaroQuote(lastIzaroQuoteEntry)}
+            `);
           }
           this.lastIzaroQuoteEntry = null;
         }
