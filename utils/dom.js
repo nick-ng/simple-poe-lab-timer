@@ -19,7 +19,15 @@ const makeDirections = (directions, correctPath = false) => {
   directionIndicator.className = 'direction_indicator';
   directionIndicator.appendChild(makeSmallDirection(directions[0], true));
   for (let i = 1; i < directions.length; i++) {
-    directionIndicator.appendChild(makeSmallDirection(directions[i]));
+    let specialRoom = '';
+    if (isNaN(directions[i])) {
+      specialRoom += directions[i];
+    } else {
+      directionIndicator.appendChild(makeSmallDirection(directions[i]));
+    }
+    if (specialRoom) {
+      directionIndicator.appendChild(document.createTextNode(specialRoom));
+    }
   }
   return directionIndicator;
 }
