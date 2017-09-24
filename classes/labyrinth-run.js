@@ -3,7 +3,7 @@ const Tail = require('always-tail');
 const fs = require('fs');
 const { splitLines, shapeLog, secondsToMinutes } = require('../utils');
 const { readPromise } = require('../utils/fs');
-const { plazaIdentifier, roomIdentifier, izaroQuote, izaroFinalDialogue, leftLabyrinth } = require('../utils/labyrinth');
+const { plazaIdentifier, slainIdentifier, roomIdentifier, izaroQuote, izaroFinalDialogue, leftLabyrinth } = require('../utils/labyrinth');
 
 class LabyrinthRun {
   constructor(logPath = '../../Games/PathOfExile/logs/Client.txt') {
@@ -57,6 +57,12 @@ class LabyrinthRun {
             }
             break;
           case 'running':
+            if (slainIdentifier(logEntry)) {
+              this._setPhase('standby');
+              clearInterval(this.intervalId);
+              this.intervalId = null;
+              break;
+            }
             if (izaro && izaroFinalDialogue.includes(izaro)) {
               this._setPhase('standby');
               clearInterval(this.intervalId);
@@ -68,7 +74,7 @@ class LabyrinthRun {
           default:
             console.log('please help')
         }
-        if (leftLabyrinth(logEntry)) {
+        if (leftLabyrinth(logEntry) && this._getPhase() !== 'standby') {
           this._setPhase('standby');
           clearInterval(this.intervalId);
           this.intervalId = null;
