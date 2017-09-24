@@ -18,9 +18,19 @@ const shapeLog = (poeLogRaw) => {
   return log;
 }
 
+const secondsToMinutes = (seconds) => {
+  const m = Math.floor(seconds / 60);
+  let s = `${seconds - (m * 60)}`;
+  if (s.length === 1) {
+    s = `0${s}`;
+  }
+  return `${m}:${s}`;
+}
+
 module.exports = {
   promiseTimeout,
   splitLines,
   filterStrings,
   shapeLog,
+  secondsToMinutes,
 }

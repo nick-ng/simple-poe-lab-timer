@@ -9,110 +9,65 @@
           color: white;
           background-color: darkslategray;
         -webkit-app-region: drag;
+        padding: 0;
+        margin: 0;
       }
-      .timer {
-      }
-      .important_events {
-        display: flex;
-        flex-direction: row;
-      }
-      .important_event {
-        flex: 1 1 50%;
-        height: 65px;
+      .container {
         display: flex;
         flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        align-items: stretch;
       }
-      .small_heading {
-        font-size: 10px;
-      }
-      .room_instruction {
-        font-size: 24px;
-        font-weight: bold;
+      .timers {
         display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        flex: 1 1;
+        flex: 0 0 auto;
+        padding: 5px 5px 2px;
       }
-      .notes {
-        display: flex;
-        flex-direction: column-reverse;
+      .timer {
+        flex: 1 1 auto;
       }
-
-      .direction_indicator {
+      .directions_container {
+        overflow: hidden;
+        flex: 1 1 auto;
         position: relative;
-        margin: 5px;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: solid 1px white;
-        background-color: midnightblue;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 16px;
       }
-
-      .small_direction {
+      .directions_image {
         position: absolute;
-        top: 0px; left: 0px; right: 0px; bottom: 0px;
-        margin: auto;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        border: solid 1px white;
-        background-color: blue;
+        width: 900px;
+        /* top: -69px; */
+        top: -75px;
+        left: -192px;
       }
-
-      .correct {
-          background-color: yellow;
+      .url_form {
+        -webkit-app-region: no-drag;
       }
-
-      .direction1 {
-        transform: rotate(135deg) translate(15px, 0px);
-      }
-      .direction2 {
-        transform: rotate(90deg) translate(15px, 0px);
-      }
-      .direction3 {
-        transform: rotate(45deg) translate(15px, 0px);
-      }
-      .direction4 {
-        transform: rotate(180deg) translate(15px, 0px);
-      }
-      .direction6 {
-        transform: rotate(0deg) translate(15px, 0px);
-      }
-      .direction7 {
-        transform: rotate(225deg) translate(15px, 0px);
-      }
-      .direction8 {
-        transform: rotate(270deg) translate(15px, 0px);
-      }
-      .direction9 {
-        transform: rotate(315deg) translate(15px, 0px);
-      }
-      .previous {
-        display: flex;
-        flex-direction: column-reverse;
+      .hidden {
+        display: none;
       }
     </style>
   </head>
   <body>
-    <div class="important_events">
-      <div class="important_event">
-        <div class="small_heading">Current</div>
-        <div id="current-room" class="room_instruction">None</div>
+    <div class="container">
+      <div class="timers">
+        <div class="timer"><span id="timer">0:00</span></div>
+        <div class="timer"><span id="best">-:--</span></div>
       </div>
-      <div class="important_event">
-        <div class="small_heading">Next</div>
-        <div id="next-room" class="room_instruction">None</div>
+      <div class="directions_container">
+        <img
+          id="lab_map"
+          src="http://www.poelab.com/wp-content/uploads/2017/09/2017-09-23_uber-1.jpg"
+          class="directions_image hidden"
+        />
+        <form
+          id="url_form"
+          class="url_form"
+        >
+          <input type="text" id="url_input"/>
+          <button>Click!</button>
+        </form>
       </div>
     </div>
-    <div id="timer" class="timer">0:00</div>
-    <hr />
-    <div class="small_heading">Notes</div>
-    <div id="notes" class="notes">ALT + F4 to exit.</div>
   </body>
   <script>
     // You can also require other files to run in this process
