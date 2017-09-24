@@ -1,11 +1,12 @@
 const START_STRING = '] : You have entered Aspirants\' Plaza.';
 const ENTERING_AREA = '] : You have entered ';
 const IZARO_DIALOGUE = '] Izaro: ';
+const SLAIN_REGEX = /] : .*has been slain\.$/;
 const izaroFinalDialogue = [
   'Triumphant at last!',
   'I die for the Empire!',
   'The trap of tyranny is inescapable.'
-]
+];
 const leavingLabyrinthRegex = [
   /] : You have entered.*Hideout\.$/, // Match any hideout
   /] : You have entered Lioneye's Watch\.$/, // Act 1 & 6
@@ -16,10 +17,14 @@ const leavingLabyrinthRegex = [
   /] : You have entered The Bridge Encampment\.$/, // Act 7
   /] : You have entered Oriath Docks\.$/, // Act 10
   /] : You have entered Oriath\.$/, // Epilogue
-]
+];
 
 const plazaIdentifier = (logEntry) => {
   return logEntry.entry.includes(START_STRING);
+}
+
+cosnt slainIdentifier = (logEntry) => {
+  return logEntry.entry.match(SLAIN_REGEX);
 }
 
 const roomIdentifier = (logEntry) => {
@@ -42,6 +47,7 @@ const leftLabyrinth = (logEntry) => {
 
 module.exports = {
   plazaIdentifier,
+  slainIdentifier,
   roomIdentifier,
   izaroQuote,
   izaroFinalDialogue,
