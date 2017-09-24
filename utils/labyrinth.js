@@ -6,12 +6,16 @@ const izaroFinalDialogue = [
   'I die for the Empire!',
   'The trap of tyranny is inescapable.'
 ]
-const leavingLabyrinth = [
-  '] : You have entered Highgate.',
-  '] : You have entered The Forest Encampment.',
-  '] : You have entered The Sarn Encampment.',
-  '] : You have entered Highgate.',
-  '] : You have entered Highgate.',
+const leavingLabyrinthRegex = [
+  /] : You have entered.*Hideout\.$/, // Match any hideout
+  /] : You have entered Lioneye's Watch\.$/, // Act 1 & 6
+  /] : You have entered The Forest Encampment\.$/, // Act 2
+  /] : You have entered The Sarn Encampment\.$/, // Act 3 & 8
+  /] : You have entered Highgate\.$/, // Act 4 & 9
+  /] : You have entered Overseer's Tower\.$/, // Act 5
+  /] : You have entered The Bridge Encampment\.$/, // Act 7
+  /] : You have entered Oriath Docks\.$/, // Act 10
+  /] : You have entered Oriath\.$/, // Epilogue
 ]
 
 const plazaIdentifier = (logEntry) => {
@@ -33,7 +37,7 @@ const izaroQuote = (logEntry) => {
 };
 
 const leftLabyrinth = (logEntry) => {
-  return leavingLabyrinth.some(town => logEntry.entry.includes(town));
+  return leavingLabyrinthRegex.some(placeRegex => logEntry.entry.match(placeRegex));
 }
 
 module.exports = {

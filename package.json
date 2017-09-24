@@ -1,7 +1,7 @@
 {
-  "name": "poe-lab-timer",
+  "name": "simple-poe-lab-timer",
   "version": "1.0.0",
-  "description": "An automatic labyrinth timer for Path of Exile",
+  "description": "A simpler automatic labyrinth timer for Path of Exile",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

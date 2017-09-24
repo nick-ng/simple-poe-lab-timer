@@ -16,16 +16,18 @@ const LabyrinthRun = require('./classes/labyrinth-run');
 const poeLogPath = '../../Games/Path Of Exile/logs/Client.txt';
 // const poeLogPath = './example_lab_run.txt';
 
+const replaceImage = (e) => {
+  e.preventDefault();
+  const newUrl = document.getElementById('url_input').value;
+  document.getElementById('lab_map').src = newUrl;
+  document.getElementById('lab_map').classList.remove('hidden');
+  document.getElementById('url_form').classList.add('hidden');
+  return false;
+}
+
+document.getElementById('url_form').addEventListener('submit', replaceImage, false);
+
 readPromise('./config.json').then(a => {
   const config = JSON.parse(a);
   const labRun = new LabyrinthRun(config.logPath || poeLogPath);
-  
-  labRun.on('current-direction-changed', () => {
-    emptyElement(document.getElementById('current-room'));
-    document.getElementById('current-room')
-      .appendChild(makeDirections(labRun.currentDirection));
-    emptyElement(document.getElementById('next-room'));
-    document.getElementById('next-room')
-      .appendChild(makeDirections(labRun.nextDirection));
-  });
 });

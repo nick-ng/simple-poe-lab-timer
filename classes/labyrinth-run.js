@@ -1,85 +1,37 @@
 const uuid = require('uuid/v4');
 const Tail = require('always-tail');
 const fs = require('fs');
-const { splitLines, shapeLog } = require('../utils');
+const { splitLines, shapeLog, secondsToMinutes } = require('../utils');
 const { readPromise } = require('../utils/fs');
 const { plazaIdentifier, roomIdentifier, izaroQuote, izaroFinalDialogue, leftLabyrinth } = require('../utils/labyrinth');
 
 class LabyrinthRun {
   constructor(logPath = '../../Games/PathOfExile/logs/Client.txt') {
     this.triggers = [];
-    this.currentDirections = [];
     this.logPath = logPath;
     this.tail = null;
-    this.runProgress = 0;
+    this.runPhase = 'standby';
     this.lastIzaroQuoteEntry = null;
     this.intervalId = null;
     this.startTime = new Date();
+    this.bestTime = Infinity;
 
-    this.getRunPhase = this.getRunPhase.bind(this);
-    this._advancePhase = this._advancePhase.bind(this);
-    this._getDirection = this._getDirection.bind(this);
-    this._setDirections = this._setDirections.bind(this);
+    this._setPhase = this._setPhase.bind(this);
+    this._getPhase = this._getPhase.bind(this);
     this._startTailing = this._startTailing.bind(this);
     this._triggerCaller = this._triggerCaller.bind(this);
     this._tailHandler = this._tailHandler.bind(this);
     this._updateTime = this._updateTime.bind(this);
 
-    readPromise('./directions.txt')
-    .then(data => {
-      this._setDirections(splitLines(data));
-    });
-
     this._startTailing(this.logPath);
   }
 
-  _setDirections(newDirections) {
-    if (Array.isArray(newDirections)) {
-      this.currentDirections = [
-        'standby',
-        'ready',
-        ...newDirections,
-      ];
-      this._triggerCaller('directions-loaded', this.currentDirections);
-      this._triggerCaller('progress-changed', this.runProgress);
-      this._triggerCaller('current-direction-changed', null);
-    };
+  _setPhase(newPhase) {
+    this.runPhase = newPhase;
   }
 
-  set directions(newDirections) {
-    this._setDirections(newDirections);
-  }
-
-  get directions() {
-    return this.currentDirections;
-  }
-
-  _getDirection(skip = 0) {
-    const directionIndex = this.runProgress + skip;
-    return directionIndex >= this.directions.length ?
-      'Finish!' :
-      this.directions[directionIndex];
-  }
-
-  get currentDirection() {
-    return this._getDirection(0);
-  }
-  get nextDirection() {
-    return this._getDirection(1);
-  }
-
-  getRunPhase(skip = 0) {
-    return this._getDirection(skip).includes('zaro') ? 'izaro' : this._getDirection(skip);
-  }
-
-  _advancePhase(reset = false) {
-    if (reset) {
-      this.runProgress = 0;
-    } else {
-      this.runProgress += 1;
-    }
-    this._triggerCaller('progress-changed', this.runProgress);
-    this._triggerCaller('current-direction-changed', null);
+  _getPhase() {
+    return this.runPhase;
   }
 
   _tailHandler(line) {
@@ -91,36 +43,33 @@ class LabyrinthRun {
         if (izaro) {
           this.lastIzaroQuoteEntry = logEntry;
         }
-        switch (this.getRunPhase(1)) { // Check next phase
-          case 'ready':
+        switch (this._getPhase()) { // Check next phase
+          case 'standby':
             if (plazaIdentifier(logEntry)) {
-              this._advancePhase();
+              this._setPhase('ready');
             }
             break;
-          case 'izaro':
+          case 'ready':
             if (izaro) {
-              this._advancePhase();
+              this.startTime = logEntry.timestamp;
+              this.intervalId = setInterval(this._updateTime, 340);
+              this._setPhase('running');
             }
             break;
-          case 'Finish!':
+          case 'running':
             if (izaro && izaroFinalDialogue.includes(izaro)) {
-              this._advancePhase();
+              this._setPhase('standby');
               clearInterval(this.intervalId);
               this.intervalId = null;
               this._updateTime(logEntry.timestamp);
             }
+            break;
           case 'room':
           default:
-            if (room) {
-              if (this.getRunPhase(0) === 'ready') {
-                this.startTime = logEntry.timestamp;
-                this.intervalId = setInterval(this._updateTime, 340);
-              }
-              this._advancePhase();
-            }
+            console.log('please help')
         }
         if (leftLabyrinth(logEntry)) {
-          this._advancePhase(true);
+          this._setPhase('standby');
           clearInterval(this.intervalId);
           this.intervalId = null;
           const { lastIzaroQuoteEntry } = this;
@@ -146,12 +95,11 @@ class LabyrinthRun {
   _updateTime(manualTime = false) {
     const now = manualTime || new Date();
     const seconds = Math.round((now - this.startTime) / 1000);
-    const m = Math.floor(seconds / 60);
-    let s = `${seconds - (m * 60)}`;
-    if (s.length === 1) {
-      s = `0${s}`;
+    document.getElementById('timer').textContent = secondsToMinutes(seconds);
+    if (manualTime) {
+      this.bestTime = Math.min(seconds, this.bestTime);
+      document.getElementById('best').textContent = secondsToMinutes(this.bestTime);
     }
-    document.getElementById('timer').textContent = `${m}:${s}`
   }
 
   on(eventName, callback) {

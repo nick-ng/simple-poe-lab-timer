@@ -17,8 +17,8 @@ const nick = {
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 300,
-    height: 150,
+    width: 503,
+    height: 188,
     frame: false,
   })
 
