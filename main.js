@@ -7,6 +7,8 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 
+const devMode = false;
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -16,10 +18,20 @@ const nick = {
 
 function createWindow () {
   // Create the browser window.
+  const width = 503;
+  const height = 188;
+
+  const mainScreen = electron.screen.getPrimaryDisplay();
+  const screenWidth = mainScreen.size.width;
+  const screenHeight = mainScreen.size.height;
+
   mainWindow = new BrowserWindow({
-    width: 503,
-    height: 188,
+    width,
+    height,
+    x: parseInt((screenWidth - width) / 2, 10), // x and y need to be integers
+    y: parseInt(screenHeight - height, 10),
     frame: false,
+    center: false,
   })
 
   // and load the index.html of the app.
@@ -30,10 +42,12 @@ function createWindow () {
   }))
 
   // make sure the windows is always on top
-  setInterval(() => mainWindow.setAlwaysOnTop(true), 1000);
+  setInterval(() => mainWindow.setAlwaysOnTop(true), 5000);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  if (devMode) {
+    mainWindow.webContents.openDevTools();
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
