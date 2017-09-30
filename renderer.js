@@ -17,7 +17,7 @@ const poeLogPath = '../../Games/Path Of Exile/logs/Client.txt';
 // const poeLogPath = './example_lab_run.txt';
 
 const replaceImage = (e) => {
-  e.preventDefault();
+  // e.preventDefault();
   const newUrl = document.getElementById('url_input').value;
   document.getElementById('lab_map').src = newUrl;
   document.getElementById('lab_map').classList.remove('hidden');
@@ -25,7 +25,8 @@ const replaceImage = (e) => {
   return false;
 }
 
-document.getElementById('url_form').addEventListener('submit', replaceImage, false);
+// document.getElementById('url_form').addEventListener('submit', replaceImage);
+document.getElementById('url_button').addEventListener('click', replaceImage)
 
 readPromise('./config.json').then(a => {
   const config = JSON.parse(a);

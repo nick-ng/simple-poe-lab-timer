@@ -23,7 +23,7 @@ const plazaIdentifier = (logEntry) => {
   return logEntry.entry.includes(START_STRING);
 }
 
-cosnt slainIdentifier = (logEntry) => {
+const slainIdentifier = (logEntry) => {
   return logEntry.entry.match(SLAIN_REGEX);
 }
 
