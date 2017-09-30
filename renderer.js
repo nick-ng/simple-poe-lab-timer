@@ -25,7 +25,8 @@ const replaceImage = (e) => {
   return false;
 }
 
-document.getElementById('url_form').addEventListener('submit', replaceImage, false);
+document.getElementById('url_form').addEventListener('submit', replaceImage);
+// document.getElementById('url_button').addEventListener('click', replaceImage)
 
 readPromise('./config.json').then(a => {
   const config = JSON.parse(a);
