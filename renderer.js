@@ -17,12 +17,14 @@ const LabyrinthRun = require('./classes/labyrinth-run');
 const poeLogPath = '../../Games/Path Of Exile/logs/Client.txt';
 // const poeLogPath = './example_lab_run.txt';
 
+const htmlElement = document.getElementById('html');
 const bodyElement = document.getElementById('body');
 const containerElement = document.getElementById('container');
 
 const makeTransparencyListener = () => {
   containerElement.addEventListener('mouseover', (e) => {
-    bodyElement.classList.add('transparent');
+    // bodyElement.classList.add('transparent');
+    // htmlElement.classList.add('html_transparent');
     electron.ipcRenderer.send('mouseIn', true);
   });
 }
@@ -53,7 +55,7 @@ readPromise('./config.json').then(a => {
 
   // Transparency logic
   electron.ipcRenderer.on('mouseOut', () => {
-    bodyElement.classList.remove('transparent');
-    // makeTransparencyListener();
+    // bodyElement.classList.remove('transparent');
+    // htmlElement.classList.remove('html_transparent');
   });
 });

@@ -51,7 +51,7 @@ function createWindow () {
     y: parseInt(screenHeight - height, 10),
     frame: false,
     center: false,
-    transparent: true,
+    // transparent: true,
     movable: false,
     icon: narwhalIconPath,
   })
@@ -80,11 +80,13 @@ function createWindow () {
   });
 
   electron.ipcMain.on('mouseIn', () => {
+    mainWindow.hide();
     mainWindow.setIgnoreMouseEvents(true);
     const transparencyId = setInterval(() => {
       const mouse = electron.screen.getCursorScreenPoint();
       const windowBounds = mainWindow.getBounds();
       if (!isXYInRect(mouse, windowBounds)) {
+        mainWindow.showInactive();
         mainWindow.webContents.send('mouseOut', true);
         mainWindow.setIgnoreMouseEvents(false);
         clearInterval(transparencyId);
