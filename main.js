@@ -53,6 +53,7 @@ function createWindow () {
     center: false,
     // transparent: true,
     movable: false,
+    skipTaskbar: true,
     icon: narwhalIconPath,
   })
 
