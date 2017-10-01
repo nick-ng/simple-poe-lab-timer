@@ -6,15 +6,24 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
+const narwhalIconPath = path.join(__dirname, 'favicon.ico');
 
 const devMode = false;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
+let tray;
 const nick = {
   value: 3,
 };
+
+const trayMenuTemplate = [
+  {
+    label: 'Close Simple PoE Lab Timer',
+    click: app.quit,
+  },
+];
 
 function createWindow () {
   // Create the browser window.
@@ -32,6 +41,7 @@ function createWindow () {
     y: parseInt(screenHeight - height, 10),
     frame: false,
     center: false,
+    icon: narwhalIconPath,
   })
 
   // and load the index.html of the app.
@@ -55,7 +65,11 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
-  })
+  });
+
+  tray = new electron.Tray(narwhalIconPath);
+  const trayMenu = electron.Menu.buildFromTemplate(trayMenuTemplate);
+  tray.setContextMenu(trayMenu);
 }
 
 // This method will be called when Electron has finished
