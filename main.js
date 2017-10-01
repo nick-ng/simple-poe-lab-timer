@@ -8,7 +8,7 @@ const path = require('path')
 const url = require('url')
 const narwhalIconPath = path.join(__dirname, 'favicon.ico');
 
-const devMode = false;
+const devMode = true;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -24,6 +24,16 @@ const trayMenuTemplate = [
     click: app.quit,
   },
 ];
+
+const isXYInRect = (xy, rect, extra = 0) => {
+  if (xy.x < (rect.x - extra) || xy.x > (rect.x + rect.width + extra)) {
+    return false;
+  }
+  if (xy.y < (rect.y - extra) || xy.y > (rect.y + rect.height + extra)) {
+    return false;
+  }
+  return true;
+}
 
 function createWindow () {
   // Create the browser window.
@@ -41,6 +51,8 @@ function createWindow () {
     y: parseInt(screenHeight - height, 10),
     frame: false,
     center: false,
+    transparent: true,
+    movable: false,
     icon: narwhalIconPath,
   })
 
@@ -67,6 +79,20 @@ function createWindow () {
     mainWindow = null
   });
 
+  electron.ipcMain.on('mouseIn', () => {
+    mainWindow.setIgnoreMouseEvents(true);
+    const transparencyId = setInterval(() => {
+      const mouse = electron.screen.getCursorScreenPoint();
+      const windowBounds = mainWindow.getBounds();
+      if (!isXYInRect(mouse, windowBounds)) {
+        mainWindow.webContents.send('mouseOut', true);
+        mainWindow.setIgnoreMouseEvents(false);
+        clearInterval(transparencyId);
+      }
+    }, 200);
+  });
+
+  // Make tray icon and menu.
   tray = new electron.Tray(narwhalIconPath);
   const trayMenu = electron.Menu.buildFromTemplate(trayMenuTemplate);
   tray.setContextMenu(trayMenu);
