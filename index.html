@@ -39,6 +39,10 @@
         top: -75px;
         left: -192px;
       }
+      .link {
+        text-decoration: underline;
+        cursor: pointer;
+      }
       .url_form {
         -webkit-app-region: no-drag;
       }
@@ -50,8 +54,8 @@
   <body>
     <div class="container">
       <div class="timers">
-        <div class="timer"><span id="timer">0:00</span></div>
-        <div class="timer"><span id="best">-:--</span></div>
+        <div class="timer">Current: <span id="timer">0:00</span></div>
+        <div class="timer">Best: <span id="best">-:--</span></div>
       </div>
       <div class="directions_container">
         <img
@@ -63,8 +67,17 @@
           id="url_form"
           class="url_form"
         >
-          <input type="text" id="url_input"/>
+        <div>
+          Get the image url from <span id="poelab_link" class="link">www.poelab.com</span>
+        </div>
+        <div>
+          <input
+            type="text"
+            id="url_input"
+            placeholder="Paste image url here."
+          />
           <button id="url_button">Click!</button>
+        </div>
         </form>
       </div>
     </div>

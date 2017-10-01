@@ -2,6 +2,7 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
+const electron = require('electron');
 const Tail = require('always-tail');
 
 const {
@@ -25,7 +26,12 @@ const replaceImage = (e) => {
   return false;
 }
 
+const openPoelabLink = (e) => {
+  electron.shell.openExternal('http://www.poelab.com');
+}
+
 document.getElementById('url_form').addEventListener('submit', replaceImage);
+document.getElementById('poelab_link').addEventListener('click', openPoelabLink);
 // document.getElementById('url_button').addEventListener('click', replaceImage)
 
 readPromise('./config.json').then(a => {
